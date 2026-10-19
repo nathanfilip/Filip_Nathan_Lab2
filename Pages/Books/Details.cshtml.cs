@@ -28,8 +28,13 @@ namespace Filip_Nathan_Lab2.Pages.Books
                 return NotFound();
             }
 
-            var book = await _context.Book.FirstOrDefaultAsync(m => m.ID == id);
-
+            var book = await _context.Book
+                .Include(b => b.Publisher)
+                .Include(b => b.Author)
+                .Include(b => b.BookCategories)
+                    .ThenInclude(b => b.Category)
+                .FirstOrDefaultAsync(m => m.ID == id);
+                
             if (book is not null)
             {
                 Book = book;
