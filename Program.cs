@@ -1,12 +1,18 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Filip_Nathan_Lab2.Data;
+using Microsoft.AspNetCore.Identity;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<Filip_Nathan_Lab2Context>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("Filip_Nathan_Lab2Context") ?? throw new InvalidOperationException("Connection string 'Filip_Nathan_Lab2Context' not found.")));
+
+builder.Services.AddDbContext<LibraryIdentityContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("Filip_Nathan_Lab2Context") ?? throw new InvalidOperationException("Connection string 'Filip_Nathan_Lab2Context' not found.")));
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<LibraryIdentityContext>();
 
 var app = builder.Build();
 
